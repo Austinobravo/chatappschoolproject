@@ -16,11 +16,24 @@ export async function POST(request: Request, response: NextApiResponse){
 
     const levelNumber = parseInt(level)
     const conversationName = String(`${name} ${level}`)
-    console.log("convoName", conversationName)
-    
-
     try{
         await prisma.$transaction(async(newPrisma) => {
+            const existingDepartmentAndLevel = await prisma.departmentLevels.findFirst({
+                where:{
+                    AND:{
+                        level:{
+                            levelNumber:levelNumber
+                        },
+                        department:{
+                            name: name
+                        }
+
+                    },
+                },
+            })
+            if(existingDepartmentAndLevel){
+                throw Error('Department exists')
+            }
             
             let existingLevel = await newPrisma.level.findUnique({
                 where:{
@@ -34,34 +47,29 @@ export async function POST(request: Request, response: NextApiResponse){
                 }
             })
 
-            if(existingDepartment && existingLevel){
-                throw Error('Department exists')
-            }else{
-                if(!existingLevel){
-                    existingLevel = await newPrisma.level.create({
-                        data:{
-                            levelNumber: levelNumber
-                        }
-                    })
-                }
-                if(!existingDepartment){
-                    existingDepartment = await newPrisma.department.create({
-                        data: {
-                            name: name,
-                            levels:{
-                                connect:{
-                                    id: existingLevel.id
-                                }
+            if(!existingLevel){
+                existingLevel = await newPrisma.level.create({
+                    data:{
+                        levelNumber: levelNumber
+                    }
+                })
+            }
+            if(!existingDepartment){
+                existingDepartment = await newPrisma.department.create({
+                    data: {
+                        name: name,
+                        levels:{
+                            connect:{
+                                id: existingLevel.id
                             }
-                            
                         }
                         
-                    })
+                    }
                     
-                }
-
+                })
+                
             }
-
+            
             await newPrisma.departmentLevels.create({
                 data:{
                     departmentId: existingDepartment.id,
