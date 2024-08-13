@@ -4,7 +4,7 @@ import ConversationCard from './ConversationCard'
 
 const ConversationList = () => {
   return (
-    <ItemsList title='Computer Science Groups'>
+    <ItemsList title='Groups'>
             <p className='text-center text-black'>Conversations</p>
             <ConversationCard/>
     </ItemsList>
