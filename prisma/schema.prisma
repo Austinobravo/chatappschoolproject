@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  username String
+  image    String?
+  password String
+  userType String  @default("student")
+
+  messages      Message[]
+  conversations Conversations[]
+  conversationMembers ConversationsMembers[]
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Department {
+  id               String             @id @default(uuid())
+  name             String             @unique
+  levels           Level[]            @relation("DepartmentLevels")
+  conversation     Conversations[]
+  user             User[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  DepartmentLevels DepartmentLevels[]
+}
+
+model Level {
+  id               String             @id @default(uuid())
+  levelNumber      Int                @unique
+  departments      Department[]       @relation("DepartmentLevels")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  DepartmentLevels DepartmentLevels[]
+}
+
+model DepartmentLevels {
+  departmentId String
+  levelId      String
+
+  department Department @relation(fields: [departmentId], references: [id])
+  level      Level      @relation(fields: [levelId], references: [id])
+
+  @@id([departmentId, levelId])
+}
+
+model Conversations {
+  id   String @id @default(uuid())
+  name String
+
+  createdBy String
+  user      User   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  lastMessage         String?
+  message             Message[]
+  conversationMembers ConversationsMembers[]
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+}
+
+
+model ConversationsMembers {
+  id String @id @default(uuid())
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  conversationId String
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message        String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
