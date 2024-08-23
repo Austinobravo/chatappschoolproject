@@ -77,13 +77,13 @@ const RegisterForm = () => {
             console.error("error", error)
         }
     }
-    const [allDepartments, setAllDepartment] = React.useState<any[] | undefined>(undefined)
+    const [allDepartments, setAllDepartment] = React.useState<any | undefined>(undefined)
     React.useEffect(()=> {
         const fetchData = async () => {
             const response = await fetch('api/department')
             if(response.ok){
                 const data = await response.json()
-                setAllDepartment(data)
+                setAllDepartment(data.allDepartments)
             }
             else{
                 toast.error(response.statusText)
@@ -135,8 +135,8 @@ const RegisterForm = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                    {allDepartments?.map((department, index) => (
-                        <SelectItem value={department.id}>{department.name}</SelectItem>
+                    {allDepartments?.map((department:any) => (
+                        <SelectItem key={department.id} value={department.id}>{department.name}</SelectItem>
                     ))}
                 </SelectContent>
               </Select>

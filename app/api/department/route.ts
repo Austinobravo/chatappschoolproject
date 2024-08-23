@@ -151,7 +151,9 @@ export async function GET(request:Request) {
             levels: groupedDepartments[name].sort((a, b) => a - b).join(', ')
         }));
 
-        return NextResponse.json(formattedDepartments, {status: 200})
+        const response = {formattedDepartments, allDepartments}
+
+        return NextResponse.json(response, {status: 200})
 
     }
     catch(error){

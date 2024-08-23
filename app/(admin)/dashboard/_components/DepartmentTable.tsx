@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 import Image from 'next/image'
   
 const DepartmentTable = () => {
-    const [allDepartments, setAllDepartment] = React.useState<any[] | undefined>(undefined)
+    const [allDepartments, setAllDepartment] = React.useState<any | undefined>(undefined)
     const {data:session} = useSession()
     const userId = session?.user.id
     // const getLevels = (dept:string) => {
@@ -26,8 +26,7 @@ const DepartmentTable = () => {
             const response = await fetch('api/department')
             if(response.ok){
                 const data = await response.json()
-                console.log('data', data)
-                setAllDepartment(data)
+                setAllDepartment(data.formattedDepartments)
             }
             else{
                 toast.error(response.statusText)
@@ -55,8 +54,8 @@ const DepartmentTable = () => {
             <TableHead>Department Level</TableHead>
             </TableRow>
         </TableHeader>
-            {allDepartments.map((department, index) => (
-                <TableBody key={index}>
+            {allDepartments?.map((department:any) => (
+                <TableBody key={department.name}>
                     <TableRow>
                     <TableCell className="font-medium">{department.name}</TableCell>
                     <TableCell>{department.levels}</TableCell>
