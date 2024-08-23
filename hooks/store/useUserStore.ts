@@ -8,6 +8,7 @@ interface UserState {
   setUser: (value: UserType) => void
   setConversation: (value: any) => void
   setMessages: (value: UpdatedConversationType) => void
+  clearStorage: () => void
 
 }
 
@@ -23,7 +24,12 @@ export const useUserStore = create(persist<UserState>((set) => ({
   },
   setMessages(message: UpdatedConversationType){
     set({messages:message})
-  },
+  }, 
+  clearStorage(){
+    set({user: undefined}),
+    set({messages: undefined}),
+    set({conversations: undefined})
+  }
 
   
 }),

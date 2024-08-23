@@ -23,6 +23,7 @@ const ConversationPage = ({params}: {params:{conversationId: string}}) => {
           return response.json()
         })
         .then((data) => {
+          
           setMessages(data)
         })
         .catch((error) => {

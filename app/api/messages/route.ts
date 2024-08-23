@@ -63,9 +63,6 @@ export async function POST(request: Request, response: NextApiResponse){
         }
         const totalMembers = conversationMember.length
         let response = {conversationMember,existingConversation, totalMembers}
-        
-        console.log("messageresponse", response)
-
         return NextResponse.json(response, {status: 201})
 
     }

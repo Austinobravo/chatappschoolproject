@@ -8,10 +8,10 @@ import React from 'react'
 import { toast } from 'sonner'
 
 const ConversationCard = () => {
-  // const {user, conversations, setConversation} = useUserStore()
+  const {user, conversations, setConversation} = useUserStore()
   const {data:session} = useSession()
   const userId = session?.user?.id
-  const [conversations, setConversation] = React.useState<any[] | undefined>(undefined)
+  // const [conversations, setConversation] = React.useState<any[] | undefined>(undefined)
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +26,11 @@ const ConversationCard = () => {
             toast.error(response.statusText)
             return
           }
-
-    
     }
-    fetchData()
-  },[userId])
+    if(userId){
+      fetchData()
+    }
+  },[userId,conversations])
   return (
     <>
     {conversations === undefined ?
