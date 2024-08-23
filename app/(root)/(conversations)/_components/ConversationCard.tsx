@@ -30,7 +30,7 @@ const ConversationCard = () => {
     
     }
     fetchData()
-  },[userId, conversations])
+  },[userId])
   return (
     <>
     {conversations === undefined ?

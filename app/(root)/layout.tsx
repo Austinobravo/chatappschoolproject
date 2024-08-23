@@ -8,6 +8,7 @@ const Layout = async ({children}: Props) => {
   const user = await getCurrentUser()
   if(!user) redirect("/login");
   if(user.email.includes("@mubi.org")){
+    console.log("user-email", user.email)
     redirect("/dashboard")
   }
   return (

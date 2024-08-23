@@ -7,7 +7,6 @@ const AuthLayout = ({children}: Props) => {
     const [open, setOpen] = React.useState<boolean>(true)
     const router = useRouter()
     const {data:session} = useSession()
-    console.log("session", session)
     if(session){
         router.push("/conversations")        
     }

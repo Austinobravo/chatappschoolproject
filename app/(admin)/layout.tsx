@@ -11,6 +11,7 @@ const AdminLayout = async  ({children}: {children: React.ReactNode}) => {
   const user = await getCurrentUser()
   if(!user) redirect("/admin");
   if(!user.email.includes("@mubi.org")){
+    console.log("user-email", user.email)
     redirect("/conversations")
   }
   return (

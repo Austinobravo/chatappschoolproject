@@ -47,8 +47,6 @@ const RegisterForm = () => {
     })
     const isSubmitting = form.formState.isSubmitting
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log('submit', values)
-
         try{
             if(isAcceptedTerms){
                 const response = await fetch('/api/register', {

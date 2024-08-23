@@ -51,7 +51,6 @@ const ConversationInput = () => {
         })
         .then((value)=> {
           form.reset()
-          console.log("newgottenData", value)
           setMessages(value)
         })
       }catch(error){
